@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='81'>🎂</text></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Project 18 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --accent: #f0c060;
+    --text: #f5f0e8;
+    --muted: rgba(245,240,232,0.45);
+  }
+
+  html, body {
+    min-height: 100vh;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    padding: 2rem 1.5rem;
+    transition: background 1s ease;
+  }
+
+  .blob-container {
+    position: fixed; inset: 0;
+    overflow: hidden; z-index: 0;
+    pointer-events: none;
+  }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.18;
+    animation: blobFloat 12s ease-in-out infinite;
+    transition: background 1s ease;
+  }
+  .blob-1 { width:45vw; height:45vw; top:-10%; left:-10%; animation-delay:0s; }
+  .blob-2 { width:35vw; height:35vw; bottom:-5%; right:-5%; animation-delay:-6s; opacity:0.12; }
+  @keyframes blobFloat {
+    0%,100% { transform:translate(0,0) scale(1); }
+    33% { transform:translate(3%,4%) scale(1.05); }
+    66% { transform:translate(-3%,2%) scale(0.97); }
+  }
+
+  .grain {
+    position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size:128px;
+  }
+
+  .card {
+    position:relative; z-index:2;
+    width:100%; max-width:420px;
+    text-align:center;
+    animation:cardIn 0.9s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(30px) scale(0.97); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .day-tag {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-size:0.7rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--day-accent); border:1px solid var(--day-accent);
+    border-radius:999px; padding:0.35rem 1rem; margin-bottom:2.5rem;
+    opacity:0; animation:fadeUp 0.6s 0.3s ease forwards;
+    transition:color 0.6s, border-color 0.6s;
+  }
+  .dot {
+    width:5px; height:5px; border-radius:50%;
+    background:var(--day-accent); animation:pulse 2s infinite;
+    transition:background 0.6s;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.4; transform:scale(0.7); }
+  }
+
+  .day-number {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(5.5rem,22vw,9rem);
+    font-weight:900; line-height:0.9; letter-spacing:-0.03em;
+    color:transparent; -webkit-text-stroke:1.5px var(--day-accent);
+    margin-bottom:0.2em; position:relative; display:inline-block;
+    opacity:0; animation:fadeUp 0.7s 0.4s ease forwards;
+    transition:-webkit-text-stroke-color 0.6s;
+  }
+  .day-number::after {
+    content:attr(data-day); position:absolute; inset:0;
+    color:var(--day-accent); opacity:0.08;
+    filter:blur(12px); transform:scale(1.02);
+    pointer-events:none; transition:color 0.6s;
+  }
+
+  .date-label {
+    font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:2rem;
+    opacity:0; animation:fadeUp 0.6s 0.5s ease forwards;
+  }
+
+  .divider {
+    width:40px; height:1px; background:var(--day-accent);
+    margin:0 auto 2rem;
+    opacity:0; animation:fadeUp 0.6s 0.55s ease forwards;
+    transition:background 0.6s;
+  }
+
+  .task-text {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(1.3rem,5vw,1.75rem);
+    font-weight:400; font-style:italic; line-height:1.45;
+    color:var(--text); margin-bottom:2.5rem;
+    opacity:0; animation:fadeUp 0.7s 0.65s ease forwards;
+  }
+
+  .countdown-pill {
+    display:inline-block;
+    font-size:0.72rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--day-bg); background:var(--day-accent);
+    border-radius:999px; padding:0.5rem 1.4rem;
+    opacity:0; animation:fadeUp 0.6s 0.8s ease forwards;
+    transition:background 0.6s, color 0.6s;
+  }
+
+  .confetti-emoji {
+    font-size:2rem; display:block; margin-bottom:1rem;
+    opacity:0; animation:fadeUp 0.5s 0.2s ease forwards, spin 4s 1s ease-in-out infinite;
+  }
+  @keyframes spin {
+    0%,100% { transform:rotate(-8deg) scale(1); }
+    50% { transform:rotate(8deg) scale(1.1); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .footer {
+    position:fixed; bottom:1.5rem; left:0; right:0;
+    text-align:center; font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:rgba(245,240,232,0.2); z-index:2; pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div class="blob-container">
+  <div class="blob blob-1" id="blob1"></div>
+  <div class="blob blob-2" id="blob2"></div>
+</div>
+<div class="grain"></div>
+
+<div class="card" id="card"></div>
+<div class="footer">27 days to 18 &nbsp;·&nbsp; your year</div>
+
+<script>
+  const tasks = {
+    1:  "Set one academic and one personal goal for the month.",
+    2:  "Listen to your favourite childhood song while walking to class.",
+    3:  "Write a quick note to your future self in the back of your notebook.",
+    4:  "Grab a different drink or snack from the campus cafe.",
+    5:  "Take the scenic route to your next lecture — a 27-minute walk.",
+    6:  "Buy a single flower or a cool sticker for your laptop.",
+    7:  "Compliment three strangers on campus.",
+    8:  "Read 5 pages of a book that isn't a textbook.",
+    9:  "Watch a movie or YouTube video from the year you were born.",
+    10: "Write down 3 things you're grateful for before bed.",
+    11: "Treat yourself to your favourite campus guilty-pleasure snack.",
+    12: "Put your phone on Do Not Disturb for one full study session.",
+    13: "Scroll back to the very beginning of your phone's photo gallery.",
+    14: "Look up a Fact of the Day and tell a classmate.",
+    15: "Wear your confidence outfit to your hardest class.",
+    16: "Doodle or plan your dream post-graduation trip.",
+    17: "Leave a positive sticky note in a library book or on a desk.",
+    18: "Do a 5-minute stretch in your room to de-stress.",
+    19: "Buy a snack to share with a roommate or friend.",
+    20: "Write a list of 27 things you've accomplished so far.",
+    21: "Sit in a new spot on campus you've never used before.",
+    22: "Use your headphones for a 5-minute solo dance break.",
+    23: "Text a friend or family member your favourite memory with them.",
+    24: "Decide exactly what you're eating for your birthday meal.",
+    25: "Actually get to bed by 11 PM to catch up on sleep.",
+    26: "Write a Year in Review journal entry about your growth.",
+    27: "🎂 Happy Birthday! Midnight toast — even with water — to a brand new year. Today you are royalty."
+  };
+
+  const accents = {
+    1:'#b388ff',2:'#64b5f6',3:'#81c784',4:'#ffb74d',5:'#f48fb1',
+    6:'#4dd0e1',7:'#fff176',8:'#ce93d8',9:'#80deea',10:'#ffcc80',
+    11:'#ea80fc',12:'#a5d6a7',13:'#ef9a9a',14:'#82b1ff',15:'#ffe082',
+    16:'#cf94da',17:'#69f0ae',18:'#ffab91',19:'#80cbc4',20:'#b39ddb',
+    21:'#c5e1a5',22:'#f8bbd0',23:'#90caf9',24:'#ffd54f',25:'#e040fb',
+    26:'#b9f6ca',27:'#ffd700'
+  };
+  const bgs = {
+    1:'#0d0a1a',2:'#0a1520',3:'#0f1a0f',4:'#1a0f0a',5:'#1a0a14',
+    6:'#0a1a18',7:'#1a1a0a',8:'#150a1a',9:'#0a1518',10:'#1a100a',
+    11:'#0f0a1a',12:'#0a1a0d',13:'#1a0a0a',14:'#0a0f1a',15:'#1a1508',
+    16:'#0f0a18',17:'#081a15',18:'#1a0e08',19:'#081218',20:'#100a1a',
+    21:'#0a1a12',22:'#1a0a10',23:'#080f1a',24:'#1a1208',25:'#0f081a',
+    26:'#081a0a',27:'#0a0806'
+  };
+
+  const now = new Date();
+
+  function getTodayDayNum() {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(2026, 2, 1);
+    const diff  = Math.floor((today - start) / 86400000) + 1;
+    return (diff >= 1 && diff <= 27) ? diff : null;
+  }
+
+  function getDaysUntilStart() {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.ceil((new Date(2026, 2, 1) - today) / 86400000);
+  }
+
+  function formatDate(d) {
+    return new Date(2026, 2, d).toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
+  }
+
+  function applyTheme(d) {
+    const accent = accents[d] || '#b388ff';
+    const bg     = bgs[d]     || '#0d0a1a';
+    document.documentElement.style.setProperty('--day-accent', accent);
+    document.documentElement.style.setProperty('--day-bg', bg);
+    document.body.style.background = bg;
+    document.getElementById('blob1').style.background = accent;
+    document.getElementById('blob2').style.background = accent;
+  }
+
+  const card    = document.getElementById('card');
+  const dayNum  = getTodayDayNum();
+
+  if (dayNum !== null) {
+    applyTheme(dayNum);
+    const isBirthday = dayNum === 27;
+    const daysLeft   = 27 - dayNum;
+
+    card.innerHTML = `
+      ${isBirthday ? '<span class="confetti-emoji">🎂</span>' : ''}
+      <div class="day-tag"><span class="dot"></span> Day ${dayNum} of 27</div>
+      <div class="day-number" data-day="${String(dayNum).padStart(2,'0')}">${String(dayNum).padStart(2,'0')}</div>
+      <div class="date-label">${formatDate(dayNum)}</div>
+      <div class="divider"></div>
+      <p class="task-text">${tasks[dayNum]}</p>
+      <span class="countdown-pill">
+        ${isBirthday ? "🎉 It's your birthday!" : daysLeft === 0 ? 'Last day before 18!' : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} to 18`}
+      </span>
+    `;
+
+  } else if (getDaysUntilStart() > 0) {
+    const du = getDaysUntilStart();
+    applyTheme(1);
+    card.innerHTML = `
+      <div class="day-tag"><span class="dot"></span> Countdown not started</div>
+      <div class="day-number" data-day="${du}">${String(du).padStart(2,'0')}</div>
+      <div class="date-label">Days until the countdown begins</div>
+      <div class="divider"></div>
+      <p class="task-text">Your 27-day birthday countdown kicks off on March 1st. Something beautiful is coming. ✨</p>
+      <span class="countdown-pill">Starting March 1, 2026</span>
+    `;
+
+  } else {
+    applyTheme(27);
+    card.innerHTML = `
+      <div class="day-tag"><span class="dot"></span> You made it</div>
+      <div class="day-number" data-day="18">18</div>
+      <div class="date-label">Your countdown is complete</div>
+      <div class="divider"></div>
+      <p class="task-text">27 small joys. 27 steps toward the best version of you. Happy belated, birthday royalty. 👑</p>
+      <span class="countdown-pill">Year 18 has begun 🎂</span>
+    `;
+  }
+</script>
+</body>
+</html>
